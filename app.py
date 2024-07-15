@@ -103,7 +103,7 @@ st.title("QUESTION SET GENERATOR")
 st.sidebar.header("SELECTION MENU")
 
 
-#############################################################################
+######################################
 # Dropdown menu
 grade = st.sidebar.selectbox(
     "GRADE",
@@ -139,9 +139,9 @@ difficulty = st.sidebar.selectbox(
 # Dropdown menu
 question_type = st.sidebar.selectbox(
     "QUESTION TYPE",
-("ASSERTION AND REASON", "CASE STUDY", "DIAGRAM", "FILL UPS",
- "GUESS WHO AM I?", "LONG", "MATCHING", "MCQ", 
- "ONE WORD", "REASONING", "TRUE OR FALSE", "VERY SHORT"))
+("ASSERTION AND REASON QUESTIONS", "CASE STUDY : CONTEXT WITH QUESTIONS", "DIAGRAM QUESTIONS", "FILL IN THE BLANKS",
+ "GUESS WHO AM I?", "LONG QUESTIONS", "MATCH THE FOLLWING", "MCQ QUESTIONS", 
+ "ONE WORD QUESTIONS", "REASONING QUESTIONS", "TRUE OR FALSE", "VERY SHORT QUESTIONS"))
 
 
 # Dropdown menu
@@ -165,36 +165,35 @@ context = extract_text(file_path)
 
 
 if st.button("GENERATE"):
-    with st.spinner("**GENERATION THE QUESTION SET .....**"):
+    with st.spinner("**GENERATING THE QUESTION SET .....**"):
         prompt_schema = PromptTemplate(
-        input_variables=['context', 'difficulty', 'grade', 'no_of_questions', 'question_type', 'subject', 'with_answers'],
-        template=question_maker_prompt)
+            input_variables=['context', 'difficulty', 'grade', 'no_of_questions', 'question_type', 'subject', 'with_answers'],
+            template=question_maker_prompt
+        )
         
-        prompt = prompt_schema.format(context = context,
-                                difficulty=difficulty,
-                                grade =grade,
-                                no_of_questions=no_of_questions,
-                                question_type = question_type,
-                                subject = subject,
-                                with_answers =with_answers)
+        prompt = prompt_schema.format(
+            context=context,
+            difficulty=difficulty,
+            grade=grade,
+            no_of_questions=no_of_questions,
+            question_type=question_type,
+            subject=subject,
+            with_answers=with_answers
+        )
 
         response = DeepInfra_mistral_inst_7b_3.invoke(prompt)
         output_content = response.content
         # st.write_stream(stream_string(output_content)) # use this for stream effect
         st.write(output_content)
 
-
         cost_usd = response.response_metadata.get('token_usage').get('estimated_cost') 
         st.write(f":green[**Response Cost Estimate = ₹ {83.52*cost_usd}**]")
- 
- 
 
-
-    # downloading text as pdf
-    pdf_data = generate_pdf(output_content, grade, subject, chapter, difficulty, question_type)
-    st.download_button(
-        label=":blue[**Download PDF**]",
-        data=pdf_data,
-        file_name=f"class{grade}_{subject}_ch{chapter}_{question_type}_Q{no_of_questions}_{with_answers}.pdf",
-        mime='application/pdf'
-    )
+        # downloading text as pdf
+        pdf_data = generate_pdf(output_content, grade, subject, chapter, difficulty, question_type)
+        st.download_button(
+            label=":blue[**Download PDF**]",
+            data=pdf_data,
+            file_name=f"class{grade}_{subject}_ch{chapter}_{question_type}_Q{no_of_questions}_{with_answers}.pdf",
+            mime='application/pdf'
+        )
