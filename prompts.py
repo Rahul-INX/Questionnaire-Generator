@@ -10,7 +10,10 @@ NUMBER OF QUESTIONS =  ''{no_of_questions}''
 SUBJECT = ''{subject}''
 WITH ANSWERS? = ''{with_answers}''
 ###
-make sure to give {no_of_questions} questions. the questions must be from the overall context.
+IMPORTANT :
+-make sure to give {no_of_questions} questions.
+-the questions must be from the overall context.
+- one give same type of questions overall , i.e. "{question_type}"
 [/INST]</s>
 
 [INST] Here are exactly {no_of_questions} questions with difficulty :{difficulty} ,based on the provided instructions. [/INST]
